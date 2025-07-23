@@ -22,7 +22,7 @@ A responsive clone of Hacker News built with React, featuring real-time data fro
 1. Clone the repository:
 
 ```bash
-git clone <your-public-repo-url>
+git clone https://github.com/TSPanha/hacker-news-clone.git
 cd hacker-news-clone
 ```
 
@@ -38,7 +38,7 @@ npm install
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+4. Open your browser and navigate to [http://localhost:5173](http://localhost:5173)
 
 ### Build for Production
 
