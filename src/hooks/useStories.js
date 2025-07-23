@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { hackerNewsApi } from "../api/hackerNews";
+import { STORIES } from "../constants";
 
 const storyCache = {
   details: {},
@@ -31,12 +32,10 @@ export const useStories = (type = "top") => {
   });
   const [loadingProgress, setLoadingProgress] = useState({ current: 0, total: 0 });
 
-  const STORIES_PER_PAGE = 20;
-
   const fetchPageDetails = useCallback(async (page, ids) => {
     setLoading(true);
-    const startIndex = (page - 1) * STORIES_PER_PAGE;
-    const endIndex = startIndex + STORIES_PER_PAGE;
+    const startIndex = (page - 1) * STORIES;
+    const endIndex = startIndex + STORIES;
     const pageIds = ids.slice(startIndex, endIndex);
     const storiesToFetch = pageIds.filter((id) => !storyCache.details[id]);
 
@@ -83,7 +82,7 @@ export const useStories = (type = "top") => {
           return;
         }
       }
-      const totalPages = Math.ceil(currentIds.length / STORIES_PER_PAGE);
+      const totalPages = Math.ceil(currentIds.length / STORIES);
       setPagination({
         currentPage: 1,
         totalPages,
@@ -111,8 +110,8 @@ export const useStories = (type = "top") => {
     if (!ids || !pagination.hasNextPage) return;
 
     const nextPage = pagination.currentPage + 1;
-    const startIndex = (nextPage - 1) * STORIES_PER_PAGE;
-    const endIndex = startIndex + STORIES_PER_PAGE;
+    const startIndex = (nextPage - 1) * STORIES;
+    const endIndex = startIndex + STORIES;
     const nextPageIds = ids.slice(startIndex, endIndex);
     const idsToPrefetch = nextPageIds.filter((id) => !storyCache.details[id]);
 
@@ -155,7 +154,7 @@ export const useStories = (type = "top") => {
     const load = async () => {
       const ids = await hackerNewsApi.getStoryIds(type);
       storyCache.ids[type] = ids;
-      const totalPages = Math.ceil(ids.length / STORIES_PER_PAGE);
+      const totalPages = Math.ceil(ids.length / STORIES);
       setPagination({
         currentPage: 1,
         totalPages,

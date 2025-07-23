@@ -8,6 +8,7 @@ import { EmptyState } from "../components/EmptyState";
 import { Pagination } from "../components/Pagination";
 import { useStories } from "../hooks/useStories";
 import { useFilters } from "../hooks/useFilters";
+import { STORIES_PER_PAGE } from "../constants";
 
 export const HomePage = ({ isFilterOpen, onFilterToggle, isMenuOpen, onMenuToggle }) => {
   const [currentType, setCurrentType] = useState("top");
@@ -29,7 +30,7 @@ export const HomePage = ({ isFilterOpen, onFilterToggle, isMenuOpen, onMenuToggl
 
   // Update filtered pagination when filtered stories change
   useEffect(() => {
-    const totalPages = Math.ceil(filteredStories.length / 10);
+    const totalPages = Math.ceil(filteredStories.length / STORIES_PER_PAGE);
     console.log(`Updating filtered pagination: ${filteredStories.length} stories = ${totalPages} pages`);
     setFilteredPagination(() => ({
       currentPage: 1,
@@ -71,8 +72,8 @@ export const HomePage = ({ isFilterOpen, onFilterToggle, isMenuOpen, onMenuToggl
 
   // Get paginated stories from filtered results
   const getPaginatedStories = (stories, currentPage) => {
-    const startIndex = (currentPage - 1) * 10;
-    const endIndex = startIndex + 10;
+    const startIndex = (currentPage - 1) * STORIES_PER_PAGE;
+    const endIndex = startIndex + STORIES_PER_PAGE;
     return stories.slice(startIndex, endIndex);
   };
 
@@ -122,7 +123,7 @@ export const HomePage = ({ isFilterOpen, onFilterToggle, isMenuOpen, onMenuToggl
                 {currentType === "ask" && " • Ask HN"}
                 {currentType === "show" && " • Show HN"}
                 {currentType === "job" && " • Job Stories"}
-                {allStories.length >= 2000 && " • Showing first 2000 stories"}
+                {allStories.length >= STORIES_PER_PAGE * 100 && ` • Showing first ${STORIES_PER_PAGE * 100} stories`}
               </p>
             </div>
           )}
@@ -131,7 +132,7 @@ export const HomePage = ({ isFilterOpen, onFilterToggle, isMenuOpen, onMenuToggl
           {displayedStories.length > 0 ? (
             <div className="space-y-4">
               {displayedStories.map((story, index) => (
-                <StoryCard key={story.id} story={story} index={hasSearchQuery ? index : (filteredPagination.currentPage - 1) * 10 + index} />
+                <StoryCard key={story.id} story={story} index={hasSearchQuery ? index : (filteredPagination.currentPage - 1) * STORIES_PER_PAGE + index} />
               ))}
             </div>
           ) : (
